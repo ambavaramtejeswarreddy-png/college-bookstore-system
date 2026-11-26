@@ -1,0 +1,16 @@
+{% extends "base.html" %}{% block title %}Campus Bookstore | Home{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="hero-copy"><span class="eyebrow">YOUR ACADEMIC COMPANION</span><h1>Knowledge is the<br><em>best investment.</em></h1>
+    <p>Find the books, notes and semester resources you need to move confidently through your academic journey.</p>
+    <div class="hero-actions"><a class="btn btn-gold" href="{{ url_for('register') }}">Create student account <span>↗</span></a><a class="text-link" href="{{ url_for('login') }}">Already a student? Sign in</a></div>
+    <div class="hero-stats"><div><b>01</b><span>One learning hub</span></div><div><b>24/7</b><span>Access resources</span></div><div><b>∞</b><span>Room to grow</span></div></div>
+  </div>
+  <div class="hero-art"><div class="art-orbit"></div><div class="book-stack"><div class="book book-one"><span>THE ART OF</span><b>LEARNING</b></div><div class="book book-two"><span>FOUNDATIONS OF</span><b>SCIENCE</b></div><div class="book book-three"><span>EXPLORE</span><b>IDEAS</b></div></div><div class="art-note">A better semester<br>starts here.</div></div>
+</section>
+<section class="section"><div class="section-heading"><div><span class="eyebrow">EXPLORE THE PLATFORM</span><h2>Everything you need,<br><em>within reach.</em></h2></div></div>
+<div class="feature-grid"><article class="feature-card"><div class="feature-icon">▤</div><h3>Academic books</h3><p>Explore recommended textbooks and references for your subjects.</p></article><article class="feature-card"><div class="feature-icon">✧</div><h3>Semester materials</h3><p>Find notes, presentations and resources organized by semester.</p></article><article class="feature-card"><div class="feature-icon">◉</div><h3>Your student space</h3><p>Keep your profile and book order history together in one place.</p></article></div></section>
+<section class="section"><div class="section-heading"><div><span class="eyebrow">THE COLLECTION</span><h2>Recently added <em>books.</em></h2></div>{% if current_user %}<a class="text-link" href="{{ url_for('books') }}">View all books ↗</a>{% else %}<a class="text-link" href="{{ url_for('login') }}">Sign in to explore ↗</a>{% endif %}</div>
+{% if books %}<div class="book-grid">{% for book in books %}<article class="book-card"><div class="book-cover">{% if book.cover %}<img src="{{ url_for('static', filename='uploads/books/' ~ book.cover) }}" alt="{{ book.title }}">{% else %}<span>✦</span><b>{{ book.title[:24] }}</b><small>ACADEMIC EDITION</small>{% endif %}</div><div class="book-info"><h3>{{ book.title }}</h3><p>{{ book.author or 'Academic reference' }}</p><strong>₹{{ '%.2f'|format(book.price) }}</strong></div></article>{% endfor %}</div>{% else %}<div class="empty-state">New books will appear here when the owner adds them.</div>{% endif %}</section>
+<section class="owner-strip"><div><span class="eyebrow">STORE MANAGEMENT</span><h2>Are you the store owner?</h2><p>Manage the academic collection and keep learning resources up to date.</p></div><a class="btn btn-outline" href="{{ url_for('owner_login') }}">Owner portal ↗</a></section>
+{% endblock %}

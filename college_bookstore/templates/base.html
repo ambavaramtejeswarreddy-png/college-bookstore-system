@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Campus Bookstore{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="{{ url_for('index') }}"><span class="brand-mark">✦</span><span>CAMPUS <b>BOOKSTORE</b><small>LEARN · EXPLORE · ACHIEVE</small></span></a>
+  <button class="menu-toggle" aria-label="Toggle navigation" onclick="document.querySelector('.nav-links').classList.toggle('open')">☰</button>
+  <nav class="nav-links">
+    <a href="{{ url_for('index') }}">Home</a>
+    {% if current_user and current_user.role == 'student' %}
+      <a href="{{ url_for('dashboard') }}">Dashboard</a><a href="{{ url_for('books') }}">Books</a>
+      <a href="{{ url_for('materials') }}">Study materials</a><a href="{{ url_for('orders') }}">My orders</a>
+      <a href="{{ url_for('profile') }}">Profile</a>
+    {% elif current_user and current_user.role == 'owner' %}
+      <a href="{{ url_for('admin') }}">Owner dashboard</a><a href="{{ url_for('manage_books') }}">Books</a>
+      <a href="{{ url_for('manage_materials') }}">Materials</a><a href="{{ url_for('manage_students') }}">Students</a>
+    {% endif %}
+    {% if current_user %}
+      <a class="nav-cta" href="{{ url_for('logout') }}">Log out</a>
+    {% else %}
+      <a href="{{ url_for('login') }}">Student login</a><a class="nav-cta" href="{{ url_for('register') }}">Get started</a>
+    {% endif %}
+  </nav>
+</header>
+<main class="page-shell">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}<div class="flash-stack">{% for category, message in messages %}<div class="flash {{ category }}">{{ message }}<button onclick="this.parentElement.remove()" aria-label="Dismiss">×</button></div>{% endfor %}</div>{% endif %}
+  {% endwith %}
+  {% block content %}{% endblock %}
+</main>
+<footer class="footer"><div class="footer-brand">✦ CAMPUS BOOKSTORE</div><p>College Book Store & Semester Study Material System</p><small>Made for student learning · © 2026</small></footer>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
